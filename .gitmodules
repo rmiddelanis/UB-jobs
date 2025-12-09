@@ -1,0 +1,3 @@
+[submodule "lib/UB-global-socioeconomic-resilience"]
+	path = lib/UB-global-socioeconomic-resilience
+	url = git@github.com:rmiddelanis/UB-global-socioeconomic-resilience.git
