@@ -13,7 +13,8 @@ scenario_macro = pd.read_csv(os.path.join(scriptdir, "lib/UB-global-socioeconomi
 hazard_prot = pd.read_csv(os.path.join(scriptdir, "lib/UB-global-socioeconomic-resilience/results/simulation_output/0_baseline/model_inputs/scenario__hazard_protection.csv"), index_col=[0, 1])
 iah = pd.read_csv(os.path.join(scriptdir, "lib/UB-global-socioeconomic-resilience/results/simulation_output/0_baseline/simulation_outputs/iah.csv"), index_col=[0, 1, 2, 3, 4, 5])
 
-scenario_cat_info = scenario_cat_info[['c', 'income_share', 'diversified_share']]
+scenario_cat_info['y'] = scenario_cat_info.k * scenario_macro.avg_prod_k
+scenario_cat_info = scenario_cat_info[['y', 'c', 'income_share', 'diversified_share']]
 
 # losses = pd.concat([iah[['dk', 'dc']], (iah.dc_short_term - iah.dk_reco + iah.dS_reco_PDS).rename('di')], axis=1)
 income_loss = (iah.dc_short_term - iah.dk_reco + iah.dS_reco_PDS).rename('di').to_frame()
