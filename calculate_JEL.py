@@ -131,3 +131,51 @@ jel_params.to_csv(os.path.join(scriptdir, 'output', 'JEL_params.csv'))
 
 print(f"JEL parameters saved to output/JEL_params.csv ({len(jel_params)} rows)")
 print(f"JEL results saved to output/JEL.csv ({len(jel_results)} rows)")
+
+# ---------------------------------------------------------------------------
+# 8. Global choropleth map of adjusted JEL
+# ---------------------------------------------------------------------------
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+import matplotlib.ticker as mticker
+import geopandas as gpd
+
+# One row per country: all hazards, total population
+jel_totals = jel_results.loc[(slice(None), 'total', 'all_hazards'), :].droplevel(['income_cat', 'hazard'])
+
+world = gpd.read_file('https://naciscdn.org/naturalearth/110m/cultural/ne_110m_admin_0_countries.zip')
+world = world.merge(jel_totals[['JEL_adj', 'JEL_adj_pop_rel']], left_on='ISO_A3_EH', right_index=True, how='left')
+world['JEL_adj_pop_pct'] = world['JEL_adj_pop_rel'] * 100
+
+maps = [
+    ('JEL_adj', 'full-time JEL (log scale)', 'Adjusted Job Equivalent Loss (JEL) by Country — All Hazards', 'jel_adj_map.png'),
+    ('JEL_adj_pop_pct', 'full-time JEL, % of population (log scale)', 'Population-Relative full-time JEL by Country — All Hazards', 'jel_adj_pop_rel_map.png'),
+]
+
+for col, cbar_label, title, fname in maps:
+    series = world[col].dropna()
+    vmin = series[series > 0].min()
+    vmax = series.max()
+    norm = mcolors.LogNorm(vmin=vmin, vmax=vmax)
+
+    fig, ax = plt.subplots(1, 1, figsize=(16, 8))
+    world.plot(
+        column=col,
+        ax=ax,
+        legend=True,
+        legend_kwds={'label': cbar_label, 'shrink': 0.6},
+        missing_kwds={'color': 'lightgrey', 'label': 'No data'},
+        cmap='OrRd',
+        norm=norm,
+    )
+    ax.set_axis_off()
+    ax.set_title(title, fontsize=14)
+
+    # Use plain decimal tick labels for percentage colorbar
+    if 'pct' in col:
+        cbar = fig.axes[-1]  # colorbar axis
+        cbar.yaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: f'{x:g}%'))
+
+    fig.savefig(os.path.join(scriptdir, 'output', fname), dpi=150, bbox_inches='tight')
+    plt.close(fig)
+    print(f"Map saved to output/{fname}")
