@@ -1,0 +1,154 @@
+model_params:
+  outpath: ./data/model_data/
+  pds_params:
+    covered_loss_share: 0.0
+    pds_borrowing_ability: unlimited
+    pds_lending_rate: 0.05
+    pds_scope:
+    - - 0
+      - 0.2
+    - - 0.2
+      - 0.4
+    - - 0.4
+      - 0.6
+    - - 0.6
+      - 0.8
+    - - 0.8
+      - 1
+    pds_targeting: perfect
+    pds_variant: 'no'
+  run_params:
+    verbose: false
+scenario_params:
+  data_params:
+    transfers_regression_params:
+      features:
+      - GDP_{pc}
+      - REM
+      - SOC
+      - UNE
+      - income_group
+      - region
+      - FSY
+      type: LassoCV
+  hazard_params:
+    fa_threshold: 0.99
+    hazard_protection: FLOPROS
+    no_exposure_bias: false
+    zero_rp: 2
+  macro_params:
+    axfin_impact: 0.1
+    discount_rate_rho: 0.06
+    early_warning_file: null
+    income_elasticity_eta: 1.5
+    reconstruction_capital: self_hous
+    reduction_vul: 0.2
+  run_params:
+    countries: all
+    download: false
+    exclude_countries:
+    - THA
+    - LUX
+    hazards: all
+    include_poverty_data: false
+    num_cores: 8
+    pip_reference_year: 2021
+    poverty_line: 3.0
+    recompute: false
+    recompute_hazard_protection: false
+    resolution: 0.2
+    verbose: false
+  policy_params:
+    min_diversified_share:
+      parameter: 0
+      scope:
+        - - 0
+          - 0.2
+        - - 0.2
+          - 0.4
+        - - 0.4
+          - 0.6
+        - - 0.6
+          - 0.8
+        - - 0.8
+          - 1
+    scale_exposure:
+      parameter: 1
+      scale_total: false
+      scope:
+        - - 0
+          - 0.2
+        - - 0.2
+          - 0.4
+        - - 0.4
+          - 0.6
+        - - 0.6
+          - 0.8
+        - - 0.8
+          - 1
+    scale_income:
+      parameter: 1
+      scope:
+        - - 0
+          - 0.2
+        - - 0.2
+          - 0.4
+        - - 0.4
+          - 0.6
+        - - 0.6
+          - 0.8
+        - - 0.8
+          - 1
+    scale_liquidity:
+      parameter: 1
+      scope:
+        - - 0
+          - 0.2
+        - - 0.2
+          - 0.4
+        - - 0.4
+          - 0.6
+        - - 0.6
+          - 0.8
+        - - 0.8
+          - 1
+    scale_non_diversified_income:
+      parameter: 1
+      scope:
+        - - 0
+          - 0.2
+        - - 0.2
+          - 0.4
+        - - 0.4
+          - 0.6
+        - - 0.6
+          - 0.8
+        - - 0.8
+          - 1
+    scale_self_employment:
+      parameter: 1
+      scope:
+        - - 0
+          - 0.2
+        - - 0.2
+          - 0.4
+        - - 0.4
+          - 0.6
+        - - 0.6
+          - 0.8
+        - - 0.8
+          - 1
+    scale_vulnerability:
+      parameter: 1
+      scale_total: false
+      scope:
+        - - 0
+          - 0.2
+        - - 0.2
+          - 0.4
+        - - 0.4
+          - 0.6
+        - - 0.6
+          - 0.8
+        - - 0.8
+          - 1
